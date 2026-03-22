@@ -236,7 +236,46 @@ User X moved card Y to column Z
 
 ---
 
-## 13. Segurança
+## 13. Sistema de Login (Autenticação)
+
+O sistema é interno e **todo acesso exige autenticação**.
+
+### Solução
+
+- **NextAuth.js** com provider de credenciais (e-mail + senha)
+- Senhas armazenadas com hash via **bcrypt** — nunca em texto puro
+- Sessão baseada em **JWT** com expiração configurável
+
+### Fluxo obrigatório
+
+1. Usuário acessa qualquer rota → middleware verifica sessão
+2. Sem sessão válida → redireciona para `/login`
+3. Login bem-sucedido → redireciona para `/` (dashboard)
+4. Logout → invalida sessão e redireciona para `/login`
+
+### Estrutura de arquivos esperada
+
+```
+/app
+  /login
+    page.tsx           ← tela de login
+/modules
+  /auth
+    useAuthenticatedUser.ts   ← hook de acesso ao usuário logado
+    authOptions.ts            ← configuração do NextAuth
+middleware.ts          ← proteção global de rotas (root do projeto)
+```
+
+### Regras
+
+- Nenhuma rota (página ou API) deve ser acessível sem sessão válida
+- O hook `useAuthenticatedUser` é o único ponto de acesso ao usuário logado nos componentes
+- Nunca expor dados sensíveis do usuário no token JWT
+- Middleware deve ser o único ponto de verificação de sessão para páginas
+
+---
+
+## 13.1. Segurança
 
 - Sanitização de HTML
 - Validação no backend

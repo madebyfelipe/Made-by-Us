@@ -44,13 +44,18 @@
 
 ---
 
-## Etapa 4 — Autenticação
+## Etapa 4 — Autenticação e Sistema de Login
 
-- [ ] Configurar NextAuth.js (ou solução equivalente)
-- [ ] Tela de login
-- [ ] Proteção de rotas autenticadas
-- [ ] Sessão persistente
-- [ ] Middleware de autenticação global
+- [ ] Configurar NextAuth.js com provider de credenciais (e-mail + senha)
+- [ ] Hash de senha com bcrypt no cadastro/seed de usuários
+- [ ] Tela de login (`/login`) com formulário validado
+- [ ] Redirecionamento automático para `/` após login bem-sucedido
+- [ ] Redirecionamento para `/login` ao acessar rota protegida sem sessão
+- [ ] Middleware global de autenticação (`middleware.ts` no root)
+- [ ] Sessão persistente via JWT (token seguro, expiração configurável)
+- [ ] Hook `useAuthenticatedUser` para acesso ao usuário logado
+- [ ] Logout com limpeza de sessão
+- [ ] Proteção de todas as rotas de API (`/api/*`) por sessão válida
 
 ---
 
