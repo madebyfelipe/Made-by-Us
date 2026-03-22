@@ -7,12 +7,12 @@
 
 ## Etapa 1 — Setup do Projeto
 
-- [ ] Inicializar projeto Next.js com App Router e TypeScript
-- [ ] Configurar TailwindCSS
-- [ ] Configurar ESLint e Prettier com regras rígidas
-- [ ] Criar estrutura de pastas (`/app`, `/components`, `/modules`, `/services`, `/hooks`, `/types`, `/utils`)
-- [ ] Configurar variáveis de ambiente (`.env.local`)
-- [ ] Commitar setup inicial limpo
+- [x] Inicializar projeto Next.js com App Router e TypeScript
+- [x] Configurar TailwindCSS
+- [x] Configurar ESLint e Prettier com regras rígidas
+- [x] Criar estrutura de pastas (`/app`, `/components`, `/modules`, `/services`, `/hooks`, `/types`, `/utils`)
+- [x] Configurar variáveis de ambiente (`.env.local`)
+- [x] Commitar setup inicial limpo
 
 ---
 
@@ -44,13 +44,24 @@
 
 ---
 
-## Etapa 4 — Autenticação
+## Etapa 4 — Autenticação e Sistema de Login
 
-- [ ] Configurar NextAuth.js (ou solução equivalente)
-- [ ] Tela de login
-- [ ] Proteção de rotas autenticadas
-- [ ] Sessão persistente
-- [ ] Middleware de autenticação global
+- [ ] Configurar NextAuth.js com provider de credenciais (e-mail + senha)
+- [ ] Hash de senha com bcrypt no cadastro/seed de usuários
+- [ ] Tela de login (`/login`) com formulário validado
+- [ ] Redirecionamento automático para `/` após login bem-sucedido
+- [ ] Redirecionamento para `/login` ao acessar rota protegida sem sessão
+- [ ] Middleware global de autenticação (`middleware.ts` no root)
+- [ ] Sessão persistente via JWT (token seguro, expiração configurável)
+- [ ] Hook `useAuthenticatedUser` para acesso ao usuário logado
+- [ ] Logout com limpeza de sessão
+- [ ] Proteção de todas as rotas de API (`/api/*`) por sessão válida
+- [ ] Campo `role` no model `User` com valores `OWNER` e `MEMBER`
+- [ ] Seed do usuário dono com `role: OWNER` (único cadastro inicial)
+- [ ] Tela de cadastro de usuários (`/admin/users/new`) acessível somente para `role: OWNER`
+- [ ] API `POST /api/admin/users` protegida por verificação de `role: OWNER`
+- [ ] Middleware de autorização: rota `/admin/*` bloqueada para `role: MEMBER`
+- [ ] Nenhuma rota pública de cadastro — registro só via painel admin do dono
 
 ---
 
