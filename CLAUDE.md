@@ -329,3 +329,50 @@ Sempre que `todo.md` for mencionado — direta ou indiretamente — o conteúdo 
 - Marcar `[~]` ao iniciar um item
 - Marcar `[!]` se houver bloqueio
 - Nunca avançar para a próxima etapa com itens `[ ]` pendentes na etapa atual
+
+---
+
+## 20. Design System — Cores e Temas
+
+### Cor de Ênfase
+
+| Token         | Valor       |
+|---------------|-------------|
+| `--color-accent` | `#FFDB01`  |
+
+A cor de ênfase `#FFDB01` é usada para: highlights, badges de status ativo, bordas de foco, botões primários e indicadores de ação.
+
+### Modo Claro (Light)
+
+| Token                      | Valor       |
+|----------------------------|-------------|
+| `--color-bg`               | `#FFFFFF`   |
+| `--color-bg-secondary`     | `#F5F5F5`   |
+| `--color-surface`          | `#FAFAFA`   |
+| `--color-border`           | `#E5E5E5`   |
+| `--color-text-primary`     | `#0A0A0A`   |
+| `--color-text-secondary`   | `#525252`   |
+| `--color-text-muted`       | `#A3A3A3`   |
+| `--color-accent`           | `#FFDB01`   |
+| `--color-accent-hover`     | `#E5C500`   |
+
+### Modo Escuro (Dark)
+
+| Token                      | Valor       |
+|----------------------------|-------------|
+| `--color-bg`               | `#0A0A0A`   |
+| `--color-bg-secondary`     | `#141414`   |
+| `--color-surface`          | `#1A1A1A`   |
+| `--color-border`           | `#2A2A2A`   |
+| `--color-text-primary`     | `#FAFAFA`   |
+| `--color-text-secondary`   | `#A3A3A3`   |
+| `--color-text-muted`       | `#525252`   |
+| `--color-accent`           | `#FFDB01`   |
+| `--color-accent-hover`     | `#FFE840`   |
+
+### Regras de uso
+
+- A cor de ênfase `#FFDB01` é **idêntica em ambos os temas** — não alterar por modo
+- Implementar via CSS custom properties no `:root` e `[data-theme="dark"]`
+- Usar `prefers-color-scheme` para detectar preferência do sistema, com opção de toggle manual
+- Nunca usar valores de cor hardcoded nos componentes — sempre referenciar os tokens
