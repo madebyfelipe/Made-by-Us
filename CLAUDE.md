@@ -266,12 +266,28 @@ O sistema é interno e **todo acesso exige autenticação**.
 middleware.ts          ← proteção global de rotas (root do projeto)
 ```
 
+### Papéis de usuário (roles)
+
+| Role     | Descrição                                      |
+|----------|------------------------------------------------|
+| `OWNER`  | Dono do sistema — único com acesso admin       |
+| `MEMBER` | Membro da equipe — acesso apenas ao conteúdo   |
+
+### Cadastro de usuários
+
+- **Não existe registro público.** Nenhuma rota de cadastro é acessível sem autenticação.
+- O único usuário `OWNER` é criado via **seed inicial** do banco de dados.
+- Novos usuários (`MEMBER`) só podem ser criados pelo `OWNER` via tela `/admin/users/new`.
+- A rota `/admin/*` é bloqueada no middleware para qualquer usuário com `role !== OWNER`.
+- A API `POST /api/admin/users` valida `role === OWNER` na sessão antes de criar qualquer usuário.
+
 ### Regras
 
 - Nenhuma rota (página ou API) deve ser acessível sem sessão válida
+- Rotas `/admin/*` exigem `role: OWNER` — bloqueio no middleware, não apenas na UI
 - O hook `useAuthenticatedUser` é o único ponto de acesso ao usuário logado nos componentes
 - Nunca expor dados sensíveis do usuário no token JWT
-- Middleware deve ser o único ponto de verificação de sessão para páginas
+- Middleware deve ser o único ponto de verificação de sessão e autorização para páginas
 
 ---
 

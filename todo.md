@@ -56,6 +56,12 @@
 - [ ] Hook `useAuthenticatedUser` para acesso ao usuário logado
 - [ ] Logout com limpeza de sessão
 - [ ] Proteção de todas as rotas de API (`/api/*`) por sessão válida
+- [ ] Campo `role` no model `User` com valores `OWNER` e `MEMBER`
+- [ ] Seed do usuário dono com `role: OWNER` (único cadastro inicial)
+- [ ] Tela de cadastro de usuários (`/admin/users/new`) acessível somente para `role: OWNER`
+- [ ] API `POST /api/admin/users` protegida por verificação de `role: OWNER`
+- [ ] Middleware de autorização: rota `/admin/*` bloqueada para `role: MEMBER`
+- [ ] Nenhuma rota pública de cadastro — registro só via painel admin do dono
 
 ---
 
