@@ -7,12 +7,12 @@
 
 ## Etapa 1 — Setup do Projeto
 
-- [ ] Inicializar projeto Next.js com App Router e TypeScript
-- [ ] Configurar TailwindCSS
-- [ ] Configurar ESLint e Prettier com regras rígidas
-- [ ] Criar estrutura de pastas (`/app`, `/components`, `/modules`, `/services`, `/hooks`, `/types`, `/utils`)
-- [ ] Configurar variáveis de ambiente (`.env.local`)
-- [ ] Commitar setup inicial limpo
+- [x] Inicializar projeto Next.js com App Router e TypeScript
+- [x] Configurar TailwindCSS
+- [x] Configurar ESLint e Prettier com regras rígidas
+- [x] Criar estrutura de pastas (`/app`, `/components`, `/modules`, `/services`, `/hooks`, `/types`, `/utils`)
+- [x] Configurar variáveis de ambiente (`.env.local`)
+- [x] Commitar setup inicial limpo
 
 ---
 
