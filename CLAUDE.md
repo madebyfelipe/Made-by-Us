@@ -305,3 +305,27 @@ Cada decisão deve considerar:
 ## 18. Regra Final
 
 > Se algo parecer confuso: **está errado. Simplifique.**
+
+---
+
+## 19. TODO.md — Regra de Verificação
+
+O arquivo `todo.md` é o **controle de progresso oficial** do projeto.
+
+### Regra obrigatória
+
+Sempre que `todo.md` for mencionado — direta ou indiretamente — o conteúdo do arquivo deve ser lido e verificado antes de qualquer ação.
+
+### Quando verificar
+
+- Ao iniciar qualquer nova etapa de desenvolvimento
+- Ao receber uma tarefa nova para implementar
+- Ao perguntar "o que falta fazer?" ou "qual o próximo passo?"
+- Ao qualquer menção de "etapa", "fase", "pendente" ou "roadmap"
+
+### Regra de atualização
+
+- Marcar `[x]` imediatamente ao concluir um item
+- Marcar `[~]` ao iniciar um item
+- Marcar `[!]` se houver bloqueio
+- Nunca avançar para a próxima etapa com itens `[ ]` pendentes na etapa atual
