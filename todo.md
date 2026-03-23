@@ -18,50 +18,50 @@
 
 ## Etapa 2 — Modelagem de Dados (Prisma)
 
-- [ ] Instalar e configurar Prisma com PostgreSQL
-- [ ] Criar schema: `User`
-- [ ] Criar schema: `Client`
-- [ ] Criar schema: `Board`
-- [ ] Criar schema: `Column`
-- [ ] Criar schema: `Card` (com todos os campos do briefing)
-- [ ] Criar schema: `ActivityLog`
-- [ ] Rodar primeira migration
-- [ ] Seed com dados de exemplo para desenvolvimento
+- [x] Instalar e configurar Prisma com PostgreSQL
+- [x] Criar schema: `User`
+- [x] Criar schema: `Client`
+- [x] Criar schema: `Board`
+- [x] Criar schema: `Column`
+- [x] Criar schema: `Card` (com todos os campos do briefing)
+- [x] Criar schema: `ActivityLog`
+- [x] Rodar primeira migration
+- [x] Seed com dados de exemplo para desenvolvimento
 
 ---
 
 ## Etapa 3 — Backend: API REST
 
-- [ ] API CRUD: `/api/clients`
-- [ ] API CRUD: `/api/boards`
-- [ ] API CRUD: `/api/columns`
-- [ ] API CRUD: `/api/cards`
-- [ ] API: mover card entre colunas (`PATCH /api/cards/:id/move`)
-- [ ] API: reordenar cards dentro da coluna
-- [ ] API: listar activity log por board
-- [ ] Validação de inputs em todas as rotas
-- [ ] Controle de acesso por usuário em todas as rotas
+- [x] API CRUD: `/api/clients`
+- [x] API CRUD: `/api/boards`
+- [x] API CRUD: `/api/columns`
+- [x] API CRUD: `/api/cards`
+- [x] API: mover card entre colunas (`PATCH /api/cards/:id/move`)
+- [x] API: reordenar cards dentro da coluna
+- [x] API: listar activity log por board
+- [x] Validação de inputs em todas as rotas
+- [!] Controle de acesso por usuário em todas as rotas (bloqueado — depende da Etapa 4)
 
 ---
 
 ## Etapa 4 — Autenticação e Sistema de Login
 
-- [ ] Configurar NextAuth.js com provider de credenciais (e-mail + senha)
-- [ ] Hash de senha com bcrypt no cadastro/seed de usuários
-- [ ] Tela de login (`/login`) com formulário validado
-- [ ] Redirecionamento automático para `/` após login bem-sucedido
-- [ ] Redirecionamento para `/login` ao acessar rota protegida sem sessão
-- [ ] Middleware global de autenticação (`middleware.ts` no root)
-- [ ] Sessão persistente via JWT (token seguro, expiração configurável)
-- [ ] Hook `useAuthenticatedUser` para acesso ao usuário logado
-- [ ] Logout com limpeza de sessão
-- [ ] Proteção de todas as rotas de API (`/api/*`) por sessão válida
-- [ ] Campo `role` no model `User` com valores `OWNER` e `MEMBER`
-- [ ] Seed do usuário dono com `role: OWNER` (único cadastro inicial)
-- [ ] Tela de cadastro de usuários (`/admin/users/new`) acessível somente para `role: OWNER`
-- [ ] API `POST /api/admin/users` protegida por verificação de `role: OWNER`
-- [ ] Middleware de autorização: rota `/admin/*` bloqueada para `role: MEMBER`
-- [ ] Nenhuma rota pública de cadastro — registro só via painel admin do dono
+- [x] Configurar NextAuth.js com provider de credenciais (e-mail + senha)
+- [x] Hash de senha com bcrypt no cadastro/seed de usuários
+- [x] Tela de login (`/login`) com formulário validado
+- [x] Redirecionamento automático para `/` após login bem-sucedido
+- [x] Redirecionamento para `/login` ao acessar rota protegida sem sessão
+- [x] Middleware global de autenticação (`proxy.ts` no root)
+- [x] Sessão persistente via JWT (token seguro, expiração configurável)
+- [x] Hook `useAuthenticatedUser` para acesso ao usuário logado
+- [x] Logout com limpeza de sessão
+- [x] Proteção de todas as rotas de API (`/api/*`) por sessão válida
+- [x] Campo `role` no model `User` com valores `OWNER` e `MEMBER`
+- [x] Seed do usuário dono com `role: OWNER` (único cadastro inicial)
+- [x] Tela de cadastro de usuários (`/admin/users/new`) acessível somente para `role: OWNER`
+- [x] API `POST /api/admin/users` protegida por verificação de `role: OWNER`
+- [x] Middleware de autorização: rota `/admin/*` bloqueada para `role: MEMBER`
+- [x] Nenhuma rota pública de cadastro — registro só via painel admin do dono
 
 ---
 
