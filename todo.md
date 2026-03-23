@@ -139,6 +139,239 @@
 
 ---
 
+## Etapa 12 — PRIORIDADE 1: Densidade Visual e Feedback Global
+
+> Foco: o sistema deve parecer "vivo" e comunicar informação sem clique.
+
+- [x] **Client Cards — densidade de informação**
+  - [x] Exibir total de tarefas abertas no card do cliente
+  - [x] Exibir tarefas atrasadas com destaque visual (deadline badge vermelho no KanbanCard)
+  - [x] Exibir data da última atividade
+  - [x] Exibir responsável principal
+- [x] **Feedback visual global**
+  - [x] Hover states em todos os elementos interativos
+  - [x] Animações leves (150ms) em transições de estado
+  - [ ] Skeleton loading para evitar tela vazia
+  - [x] Feedback imediato ao clicar (hover bg + border)
+- [x] **Status visível sem abrir card**
+  - [x] Exibir prioridade no card Kanban
+  - [x] Exibir status no card Kanban (dot colorido + label)
+  - [x] Exibir responsável (iniciais em avatar) no card Kanban
+  - [x] Exibir deadline no card Kanban (DeadlineBadge com alerta de atraso)
+- [x] **Sistema de cores funcional**
+  - [x] Verde → concluído (DONE)
+  - [x] Amarelo → em andamento (IN_PROGRESS)
+  - [x] Vermelho → urgente / alta prioridade
+  - [x] Azul → em revisão (IN_REVIEW)
+  - [x] Padronizar uso em badges, bordas e indicadores
+
+---
+
+## Etapa 13 — PRIORIDADE 2: Formulário de Card (Campos Operacionais)
+
+> Foco: o card deve capturar contexto real de produção de conteúdo.
+
+- [x] **Novos campos no model `Card` (Prisma + migration)**
+  - [x] `contentType`: `POST | STORY | REELS | CAROUSEL | ADS`
+  - [x] `platform`: string comma-separated (instagram, linkedin, tiktok, youtube)
+  - [x] `effort`: `LOW | MEDIUM | HIGH`
+  - [x] `stage`: `ROTEIRO | DESIGN | EDICAO | REVISAO | APROVACAO`
+  - [x] `deadline`: DateTime
+  - [x] `cta`: String (call to action)
+- [x] **Separar `status` de `stage`**
+  - [x] `status` → estado geral (TODO | IN_PROGRESS | IN_REVIEW | DONE)
+  - [x] `stage` → etapa de produção (campo separado)
+  - [x] Atualizar APIs afetadas
+  - [x] Atualizar componentes afetados
+- [x] **Reestruturar layout do formulário** com ordem e agrupamento
+- [x] **Agrupar campos por contexto** (blocos visuais)
+  - [x] Identificação (título, tipo, plataforma)
+  - [x] Execução (responsável, deadline, prioridade, status, esforço, etapa)
+  - [x] Estratégia (objetivo, CTA, direção criativa)
+  - [x] Referências (referências, link Drive)
+- [x] **Converter inputs livres para selects/chips**
+  - [x] `contentType` → chips
+  - [x] `platform` → chips multi-select
+  - [x] `priority` → select
+  - [x] `effort` → select
+  - [x] `stage` → chips
+
+---
+
+## Etapa 14 — PRIORIDADE 3: Formulário de Cliente (Campos Estratégicos)
+
+> Foco: cliente deve carregar contexto suficiente para guiar a produção.
+
+- [x] **Novos campos no model `Client` (Prisma + migration)**
+  - [x] `niche`: String
+  - [x] `toneOfVoice`: String
+  - [x] `mainObjective`: String
+  - [x] `platforms`: String (comma-separated)
+  - [x] `contentFrequency`: String
+  - [x] `targetAudience`: String
+  - [x] `restrictions`: String
+  - [x] `differentials`: String
+  - [x] `operationalGuidelines`: String
+- [x] Atualizar tela de criação/edição de cliente com novos campos
+- [x] Agrupar campos por contexto (Identidade, Estratégia, Operacional)
+- [x] **Melhorar HTML customizado**
+  - [x] Garantir sanitização com DOMPurify antes de salvar
+  - [x] Renderizar em iframe ou sandbox isolado
+  - [x] Validar que HTML não quebra layout global (fundo branco forçado no iframe)
+
+---
+
+## Etapa 15 — PRIORIDADE 4: Escaneabilidade e Contexto
+
+> Foco: usuário entende o estado do sistema em 1 segundo.
+
+- [x] **Leitura rápida**
+  - [x] Ajustar contraste de textos secundários
+  - [x] Animações leves 150ms em transições de estado
+  - [x] Ícones e badges visíveis no card Kanban (contentType, platform, deadline, assignee)
+- [x] **Breadcrumb contextual**
+  - [x] Implementar `Cliente > Board` no header do board
+- [x] **Header do board**
+  - [x] Exibir nome do cliente
+  - [x] Exibir descrição curta do cliente
+  - [x] Botão rápido "Ver cliente" no header
+
+---
+
+## Etapa 16 — PRIORIDADE 5: Interação e Fluxo
+
+> Foco: menos cliques, mais velocidade operacional.
+
+- [x] **Kanban UX**
+  - [x] Animação suave no drag (rotate-1 scale-105 shadow-2xl no overlay)
+  - [x] Highlight da coluna de destino ativa durante drag (bg + ring accent)
+  - [x] Sombra elevada no card sendo arrastado
+- [x] **Quick actions**
+  - [x] Botão rápido: ver perfil do cliente a partir do board
+  - [x] Botão rápido: novo card dentro da coluna (empty state + botão abaixo)
+  - [x] BoardManager: criar, renomear e excluir boards direto na tela do cliente
+- [x] **Criação rápida via texto**
+  - [x] Modal "Criar via texto" com textarea de template
+  - [x] Parser de template com todos os campos do card
+  - [x] Suporte a múltiplos cards separados por `---`
+  - [x] Tela de revisão antes de confirmar criação em lote
+
+---
+
+## Etapa 17 — PRIORIDADE 6: Estados Vazios
+
+> Foco: nenhuma tela vazia sem contexto ou ação.
+
+- [x] Empty state na listagem de clientes (sem clientes) — CTA "Criar primeiro cliente"
+- [x] Empty state no dashboard (sem boards) — link para clientes
+- [x] Empty state na coluna sem cards — botão dashed "+ Novo card"
+- [x] Empty state no activity log — mensagem "Nenhuma atividade registrada"
+- [x] Cada empty state tem: mensagem clara + CTA direto
+
+---
+
+## Etapa 18 — PRIORIDADE 7: Atalhos de Teclado (Opcional)
+
+> Foco: velocidade para usuários avançados.
+
+- [ ] `N` → novo card (no board ativo)
+- [ ] `/` → abrir busca global
+- [ ] `G` + `C` → navegar para clientes
+
+---
+
+## Etapa 19 — Navegação Global (Header)
+
+> Foco: interface unificada com acesso rápido a todos os módulos.
+
+- [ ] Componente `AppHeader` (fixed top, z-50)
+  - [ ] Logo com link para `/`
+  - [ ] Links de navegação: Jobs (`/jobs`), Clientes (`/clients`)
+  - [ ] `NotificationBell` no canto direito
+  - [ ] `UserAvatarMenu` no canto direito
+- [ ] Integrar em `app/layout.tsx` (visível em todas as rotas exceto `/login`)
+- [ ] Adicionar `pt-12` ao wrapper de conteúdo para compensar header fixo
+- [ ] Remover headers isolados das páginas existentes (dashboard, clientes, perfil)
+
+---
+
+## Etapa 20 — Tela de Jobs (Lista de Cards)
+
+> Foco: visão operacional de todos os cards como lista plana.
+
+- [ ] Página `/jobs` (server component)
+- [ ] Componente `JobsTable` (client — com filtro toggle)
+  - [ ] Filtro: "Minha Pauta" (atribuídos ao usuário) / "Todos" (OWNER)
+  - [ ] Colunas: título + coluna, prazo (colorido por urgência), cliente + board, tipo de conteúdo, status
+  - [ ] Deadline colorido: vermelho (atrasado), âmbar (≤3 dias), muted (futuro)
+  - [ ] Link no título para abrir o card no Kanban
+
+---
+
+## Etapa 21 — Notificações
+
+> Foco: alertas de cards atribuídos ao usuário logado.
+
+- [ ] API `GET /api/notifications`
+  - [ ] Retorna cards onde `assignedUserId === session.user.id`
+  - [ ] Include: título, coluna, cliente, deadline, status
+  - [ ] Ordenado por `updatedAt desc`, limite 20
+- [ ] Componente `NotificationBell`
+  - [ ] Ícone de sino com badge de contagem (cards não-DONE)
+  - [ ] Dropdown ao clicar com lista de cards
+  - [ ] Fetch client-side ao abrir
+
+---
+
+## Etapa 22 — Avatar e Menu do Usuário
+
+> Foco: acesso rápido ao perfil e ações do usuário.
+
+- [ ] Componente `UserAvatarMenu`
+  - [ ] Círculo com inicial do nome (`bg-[#BC0319]`)
+  - [ ] Dropdown: Configurações → `/settings`, Sair → `signOut()`
+  - [ ] Fechar ao clicar fora (click-outside)
+
+---
+
+## Etapa 23 — Tela de Configurações
+
+> Foco: gestão de conta e preferências do usuário.
+
+- [ ] Página `/settings`
+  - [ ] Seção **Conta**: nome, e-mail, role (read-only)
+  - [ ] Seção **Senha**: troca de senha com validação da senha atual
+  - [ ] Seção **Aparência**: toggle tema claro/escuro
+- [ ] API `POST /api/user/password`
+  - [ ] Validar sessão
+  - [ ] Verificar senha atual com bcrypt
+  - [ ] Hash da nova senha e salvar
+
+---
+
+## Etapa 24 — Sistema de Temas (Claro/Escuro)
+
+> Foco: conforto visual e preferência do usuário.
+
+- [ ] Adicionar CSS custom properties em `globals.css` (tokens de CLAUDE.md §20)
+  - [ ] `[data-theme="dark"]` (padrão atual)
+  - [ ] `[data-theme="light"]` (novo)
+- [ ] Persistência via `localStorage` + `document.documentElement.dataset.theme`
+- [ ] Aplicar na inicialização via `app/providers.tsx`
+
+---
+
+## Etapa 25 — Perfil Estratégico do Cliente
+
+> Foco: contexto do cliente visível sem entrar no modo de edição.
+
+- [ ] Adicionar seção "Perfil Estratégico" em `/clients/[id]`
+  - [ ] Campos: nicho, tom de voz, frequência, objetivo, público-alvo, restrições, diferenciais, diretrizes
+  - [ ] Renderizar apenas se ao menos um campo estiver preenchido
+  - [ ] Layout em grid com leitura clara
+
+---
+
 ## Legenda
 
 | Símbolo | Significado       |

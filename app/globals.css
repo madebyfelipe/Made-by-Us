@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+/* ─── Design Tokens ──────────────────────────────────────────────────────────── */
+
 :root {
   --color-bg: #ffffff;
   --color-bg-secondary: #f5f5f5;
@@ -24,19 +26,7 @@
   --color-accent-hover: #D4031E;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-bg: #0a0a0a;
-    --color-bg-secondary: #141414;
-    --color-surface: #1a1a1a;
-    --color-border: #2a2a2a;
-    --color-text-primary: #fafafa;
-    --color-text-secondary: #a3a3a3;
-    --color-text-muted: #525252;
-    --color-accent: #BC0319;
-    --color-accent-hover: #D4031E;
-  }
-}
+/* ─── Base ───────────────────────────────────────────────────────────────────── */
 
 body {
   background: var(--color-bg);
@@ -44,14 +34,98 @@ body {
   font-family: var(--font-geist-sans), Arial, sans-serif;
 }
 
-/* Logo theme switching */
-.logo-dark { display: none; }
+/* ─── Logo theme switching ───────────────────────────────────────────────────── */
+
+.logo-dark  { display: none; }
 .logo-light { display: block; }
 
-[data-theme="dark"] .logo-dark { display: block; }
+[data-theme="dark"] .logo-dark  { display: block; }
 [data-theme="dark"] .logo-light { display: none; }
 
-@media (prefers-color-scheme: dark) {
-  .logo-dark { display: block; }
-  .logo-light { display: none; }
+/* ─── Dashboard background image per theme ───────────────────────────────────── */
+
+.dashboard-main-bg {
+  background-image: url('/bg-main-light.png');
+  background-repeat: no-repeat;
+  background-position: right center;
+  background-size: auto 100vh;
+  background-attachment: fixed;
 }
+
+[data-theme="dark"] .dashboard-main-bg {
+  background-image: url('/bg-main-dark.png');
+}
+
+/* ─── Light mode overrides ───────────────────────────────────────────────────── */
+/*
+ * Components use hardcoded Tailwind arbitrary-value classes (bg-[#0A0A0A] etc.)
+ * These CSS selectors escape the special characters and override those classes
+ * when data-theme="light" is set on the <html> element.
+ */
+
+/* Backgrounds */
+[data-theme="light"] .bg-\[\#0A0A0A\],
+[data-theme="light"] .bg-\[\#0a0a0a\] { background-color: #ffffff !important; }
+
+[data-theme="light"] .bg-\[\#141414\] { background-color: #f5f5f5 !important; }
+
+[data-theme="light"] .bg-\[\#1A1A1A\],
+[data-theme="light"] .bg-\[\#1a1a1a\] { background-color: #ebebeb !important; }
+
+[data-theme="light"] .bg-\[\#0D0D0D\],
+[data-theme="light"] .bg-\[\#0d0d0d\] { background-color: #f8f8f8 !important; }
+
+[data-theme="light"] .bg-\[\#2A2A2A\],
+[data-theme="light"] .bg-\[\#2a2a2a\] { background-color: #e0e0e0 !important; }
+
+[data-theme="light"] .bg-\[\#1E1E1E\],
+[data-theme="light"] .bg-\[\#1e1e1e\] { background-color: #eeeeee !important; }
+
+/* Hover backgrounds */
+[data-theme="light"] .hover\:bg-\[\#1A1A1A\]:hover,
+[data-theme="light"] .hover\:bg-\[\#1a1a1a\]:hover { background-color: #f0f0f0 !important; }
+
+[data-theme="light"] .hover\:bg-\[\#0D0D0D\]:hover,
+[data-theme="light"] .hover\:bg-\[\#0d0d0d\]:hover { background-color: #f5f5f5 !important; }
+
+/* Text colors */
+[data-theme="light"] .text-\[\#FAFAFA\],
+[data-theme="light"] .text-\[\#fafafa\] { color: #0a0a0a !important; }
+
+[data-theme="light"] .text-\[\#A3A3A3\],
+[data-theme="light"] .text-\[\#a3a3a3\] { color: #404040 !important; }
+
+[data-theme="light"] .text-\[\#525252\] { color: #737373 !important; }
+
+[data-theme="light"] .text-\[\#2A2A2A\],
+[data-theme="light"] .text-\[\#2a2a2a\] { color: #c0c0c0 !important; }
+
+[data-theme="light"] .text-\[\#3A3A3A\],
+[data-theme="light"] .text-\[\#3a3a3a\] { color: #a0a0a0 !important; }
+
+/* Borders */
+[data-theme="light"] .border-\[\#2A2A2A\],
+[data-theme="light"] .border-\[\#2a2a2a\] { border-color: #d4d4d4 !important; }
+
+[data-theme="light"] .border-\[\#1A1A1A\],
+[data-theme="light"] .border-\[\#1a1a1a\] { border-color: #e5e5e5 !important; }
+
+[data-theme="light"] .border-\[\#3A3A3A\],
+[data-theme="light"] .border-\[\#3a3a3a\] { border-color: #c0c0c0 !important; }
+
+/* Hover borders */
+[data-theme="light"] .hover\:border-\[\#3A3A3A\]:hover,
+[data-theme="light"] .hover\:border-\[\#3a3a3a\]:hover { border-color: #a0a0a0 !important; }
+
+/* Divide lines */
+[data-theme="light"] .divide-\[\#1A1A1A\] > * + *,
+[data-theme="light"] .divide-\[\#1a1a1a\] > * + * { border-color: #e5e5e5 !important; }
+
+[data-theme="light"] .divide-\[\#2A2A2A\] > * + *,
+[data-theme="light"] .divide-\[\#2a2a2a\] > * + * { border-color: #d4d4d4 !important; }
+
+/* Ring */
+[data-theme="light"] .ring-\[\#BC0319\]\/30 { --tw-ring-color: rgb(188 3 25 / 0.3); }
+
+/* Placeholder text */
+[data-theme="light"] .placeholder-\[\#525252\]::placeholder { color: #a3a3a3 !important; }
