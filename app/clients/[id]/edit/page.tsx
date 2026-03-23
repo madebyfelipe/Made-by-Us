@@ -4,6 +4,8 @@ import { getAuthSession } from '@/modules/auth/server'
 import { prismaClient } from '@/services/prismaClient'
 import ClientForm from '@/modules/clients/ClientForm'
 
+export const dynamic = 'force-dynamic'
+
 type Props = {
   params: Promise<{ id: string }>
 }

@@ -3,6 +3,8 @@ import { canEditWorkspace } from '@/modules/auth/permissions'
 import { getAuthSession } from '@/modules/auth/server'
 import { prismaClient } from '@/services/prismaClient'
 
+export const dynamic = 'force-dynamic'
+
 type ClientWithStats = Awaited<ReturnType<typeof fetchClientsWithStats>>[number]
 
 async function fetchClientsWithStats() {

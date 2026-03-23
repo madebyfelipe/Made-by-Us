@@ -5,6 +5,8 @@ import UserManagement from '@/modules/users/UserManagement'
 import { managedUserSelect } from '@/services/adminUserService'
 import { prismaClient } from '@/services/prismaClient'
 
+export const dynamic = 'force-dynamic'
+
 export default async function AdminUsersPage() {
   const session = await getAuthSession()
 

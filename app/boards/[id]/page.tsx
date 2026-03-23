@@ -7,6 +7,8 @@ import KanbanBoard from '@/modules/kanban/KanbanBoard'
 import ActivityLogPanel from '@/modules/activity/ActivityLogPanel'
 import type { BoardWithColumnsAndCards } from '@/types'
 
+export const dynamic = 'force-dynamic'
+
 type Props = {
   params: Promise<{ id: string }>
 }

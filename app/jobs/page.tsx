@@ -1,6 +1,8 @@
 import JobsTable from '@/modules/jobs/JobsTable'
 import { prismaClient } from '@/services/prismaClient'
 
+export const dynamic = 'force-dynamic'
+
 export default async function JobsPage() {
   const cards = await prismaClient.card.findMany({
     orderBy: { createdAt: 'desc' },

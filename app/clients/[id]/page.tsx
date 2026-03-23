@@ -7,6 +7,8 @@ import ClientStrategicProfile from '@/modules/clients/ClientStrategicProfile'
 import BoardManager from '@/modules/clients/BoardManager'
 import { prismaClient } from '@/services/prismaClient'
 
+export const dynamic = 'force-dynamic'
+
 type Props = {
   params: Promise<{ id: string }>
 }
