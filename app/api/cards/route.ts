@@ -33,44 +33,49 @@ export async function POST(request: Request) {
 
   if (!parsed.success) {
     return NextResponse.json(
-      { error: parsed.error.issues[0]?.message ?? 'Dados invÃ¡lidos' },
+      { error: parsed.error.issues[0]?.message ?? 'Dados inválidos' },
       { status: 400 },
     )
   }
 
-  const card = await prismaClient.card.create({
-    data: {
-      title: parsed.data.title,
-      description: parsed.data.description,
-      objective: parsed.data.objective,
-      references: parsed.data.references,
-      driveLink: parsed.data.driveLink,
-      cta: parsed.data.cta,
-      status: parsed.data.status,
-      priority: parsed.data.priority,
-      contentType: parsed.data.contentType ?? null,
-      platform: parsed.data.platform,
-      effort: parsed.data.effort ?? null,
-      stage: parsed.data.stage ?? null,
-      deadline: parsed.data.deadline ?? null,
-      order: parsed.data.order,
-      columnId: parsed.data.columnId,
-      assignedUserId: parsed.data.assignedUserId ?? null,
-    },
-    include: {
-      assignedUser: { select: { id: true, name: true } },
-      column: { select: { boardId: true } },
-    },
-  })
+  try {
+    const card = await prismaClient.card.create({
+      data: {
+        title: parsed.data.title,
+        description: parsed.data.description,
+        objective: parsed.data.objective,
+        references: parsed.data.references,
+        driveLink: parsed.data.driveLink,
+        cta: parsed.data.cta,
+        status: parsed.data.status,
+        priority: parsed.data.priority,
+        contentType: parsed.data.contentType ?? null,
+        platform: parsed.data.platform,
+        effort: parsed.data.effort ?? null,
+        stage: parsed.data.stage ?? null,
+        deadline: parsed.data.deadline ?? null,
+        order: parsed.data.order,
+        columnId: parsed.data.columnId,
+        assignedUserId: parsed.data.assignedUserId ?? null,
+      },
+      include: {
+        assignedUser: { select: { id: true, name: true } },
+        column: { select: { boardId: true } },
+      },
+    })
 
-  if (session?.user?.id) {
-    await createActivityLog({
-      message: `${session.user.name} criou "${card.title}"`,
-      userId: session.user.id,
-      boardId: card.column.boardId,
-      cardId: card.id,
-    }).catch(() => {})
+    if (session?.user?.id) {
+      await createActivityLog({
+        message: `${session.user.name} criou "${card.title}"`,
+        userId: session.user.id,
+        boardId: card.column.boardId,
+        cardId: card.id,
+      }).catch(() => {})
+    }
+
+    return NextResponse.json(card, { status: 201 })
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Erro interno ao criar card'
+    return NextResponse.json({ error: message }, { status: 500 })
   }
-
-  return NextResponse.json(card, { status: 201 })
 }
