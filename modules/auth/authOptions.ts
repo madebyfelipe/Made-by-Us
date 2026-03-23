@@ -57,14 +57,18 @@ export const authOptions: AuthOptions = {
         token.role = user.role
         token.isActive = user.isActive
       } else if (token.id) {
-        const currentUser = await prismaClient.user.findUnique({
-          where: { id: token.id },
-          select: { role: true, isActive: true },
-        })
+        try {
+          const currentUser = await prismaClient.user.findUnique({
+            where: { id: token.id },
+            select: { role: true, isActive: true },
+          })
 
-        if (currentUser) {
-          token.role = currentUser.role
-          token.isActive = currentUser.isActive
+          if (currentUser) {
+            token.role = currentUser.role
+            token.isActive = currentUser.isActive
+          }
+        } catch {
+          // Mantém os valores existentes do token se o banco estiver indisponível
         }
       }
       return token

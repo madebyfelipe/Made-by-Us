@@ -120,7 +120,8 @@ export default function QuickCreateModal({ columns, onClose, onCardsCreated }: P
         })
 
         if (!response.ok) {
-          throw new Error(`Erro ao criar card "${card.title}"`)
+          const errorData = await response.json().catch(() => ({}))
+          throw new Error(errorData.error ?? `Erro ao criar card "${card.title}"`)
         }
 
         createdCards.push(await response.json())
