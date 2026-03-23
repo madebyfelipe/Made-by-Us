@@ -7,14 +7,7 @@ const globalForPrisma = globalThis as unknown as {
 
 function createPrismaClient(): PrismaClient {
   const isProduction = process.env.NODE_ENV === 'production'
-  const connectionString = process.env.DATABASE_URL!
-
-  try {
-    const { hostname, port } = new URL(connectionString)
-    console.log('[prisma] Connecting to:', hostname, 'port:', port)
-  } catch {
-    console.error('[prisma] Invalid DATABASE_URL:', connectionString)
-  }
+  const connectionString = process.env['DATABASE_URL']!
 
   const adapter = new PrismaPg({
     connectionString,
