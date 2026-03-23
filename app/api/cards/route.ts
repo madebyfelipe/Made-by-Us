@@ -53,7 +53,7 @@ export async function POST(request: Request) {
         platform: parsed.data.platform,
         effort: parsed.data.effort ?? null,
         stage: parsed.data.stage ?? null,
-        deadline: parsed.data.deadline ?? null,
+        deadline: parsed.data.deadline ? new Date(parsed.data.deadline) : null,
         order: parsed.data.order,
         columnId: parsed.data.columnId,
         assignedUserId: parsed.data.assignedUserId ?? null,
