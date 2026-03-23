@@ -1,18 +1,7 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import { Providers } from "./providers";
 import AppHeader from "@/components/AppHeader";
 import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "Made by Felipe",
@@ -29,7 +18,7 @@ export default function RootLayout({
       lang="en"
       data-theme="dark"
       suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className="h-full antialiased"
     >
       {/* Inline script runs before paint — prevents theme flash */}
       <head>

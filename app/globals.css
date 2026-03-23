@@ -3,6 +3,8 @@
 /* ─── Design Tokens ──────────────────────────────────────────────────────────── */
 
 :root {
+  --font-geist-sans: "Segoe UI", Arial, Helvetica, sans-serif;
+  --font-geist-mono: "Cascadia Code", "Courier New", monospace;
   --color-bg: #ffffff;
   --color-bg-secondary: #f5f5f5;
   --color-surface: #fafafa;
