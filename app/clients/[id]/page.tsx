@@ -5,6 +5,7 @@ import { getAuthSession } from '@/modules/auth/server'
 import ClientHtmlPreview from '@/modules/clients/ClientHtmlPreview'
 import ClientStrategicProfile from '@/modules/clients/ClientStrategicProfile'
 import BoardManager from '@/modules/clients/BoardManager'
+import DeleteClientButton from '@/modules/clients/DeleteClientButton'
 import { prismaClient } from '@/services/prismaClient'
 
 export const dynamic = 'force-dynamic'
@@ -61,12 +62,15 @@ export default async function ClientProfilePage({ params }: Props) {
         </div>
 
         {canEdit && (
-          <Link
-            href={`/clients/${id}/edit`}
-            className="rounded-lg border border-[#2A2A2A] px-5 py-2.5 text-sm font-medium text-[#A3A3A3] transition-colors hover:border-[#BC0319] hover:text-[#FAFAFA]"
-          >
-            Editar cliente
-          </Link>
+          <div className="flex items-center gap-3">
+            <DeleteClientButton clientId={id} clientName={client.name} />
+            <Link
+              href={`/clients/${id}/edit`}
+              className="rounded-lg border border-[#2A2A2A] px-5 py-2.5 text-sm font-medium text-[#A3A3A3] transition-colors hover:border-[#BC0319] hover:text-[#FAFAFA]"
+            >
+              Editar cliente
+            </Link>
+          </div>
         )}
       </header>
 
