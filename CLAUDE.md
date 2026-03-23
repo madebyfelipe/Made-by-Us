@@ -393,9 +393,9 @@ Sempre que `todo.md` for mencionado — direta ou indiretamente — o conteúdo 
 
 | Token         | Valor       |
 |---------------|-------------|
-| `--color-accent` | `#FFDB01`  |
+| `--color-accent` | `#BC0319`  |
 
-A cor de ênfase `#FFDB01` é usada para: highlights, badges de status ativo, bordas de foco, botões primários e indicadores de ação.
+A cor de ênfase `#BC0319` é usada para: highlights, badges de status ativo, bordas de foco, botões primários e indicadores de ação.
 
 ### Modo Claro (Light)
 
@@ -408,8 +408,8 @@ A cor de ênfase `#FFDB01` é usada para: highlights, badges de status ativo, bo
 | `--color-text-primary`     | `#0A0A0A`   |
 | `--color-text-secondary`   | `#525252`   |
 | `--color-text-muted`       | `#A3A3A3`   |
-| `--color-accent`           | `#FFDB01`   |
-| `--color-accent-hover`     | `#E5C500`   |
+| `--color-accent`           | `#BC0319`   |
+| `--color-accent-hover`     | `#A30215`   |
 
 ### Modo Escuro (Dark)
 
@@ -422,12 +422,12 @@ A cor de ênfase `#FFDB01` é usada para: highlights, badges de status ativo, bo
 | `--color-text-primary`     | `#FAFAFA`   |
 | `--color-text-secondary`   | `#A3A3A3`   |
 | `--color-text-muted`       | `#525252`   |
-| `--color-accent`           | `#FFDB01`   |
-| `--color-accent-hover`     | `#FFE840`   |
+| `--color-accent`           | `#BC0319`   |
+| `--color-accent-hover`     | `#D4031E`   |
 
 ### Regras de uso
 
-- A cor de ênfase `#FFDB01` é **idêntica em ambos os temas** — não alterar por modo
+- A cor de ênfase `#BC0319` é **idêntica em ambos os temas** — não alterar por modo
 - Implementar via CSS custom properties no `:root` e `[data-theme="dark"]`
 - Usar `prefers-color-scheme` para detectar preferência do sistema, com opção de toggle manual
 - Nunca usar valores de cor hardcoded nos componentes — sempre referenciar os tokens

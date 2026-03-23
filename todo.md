@@ -40,7 +40,7 @@
 - [x] API: reordenar cards dentro da coluna
 - [x] API: listar activity log por board
 - [x] Validação de inputs em todas as rotas
-- [!] Controle de acesso por usuário em todas as rotas (bloqueado — depende da Etapa 4)
+- [x] Controle de acesso por usuário em todas as rotas (desbloqueado com Etapa 4)
 
 ---
 
@@ -67,65 +67,65 @@
 
 ## Etapa 5 — Kanban (Core do sistema)
 
-- [ ] Instalar e configurar dnd-kit
-- [ ] Componente `KanbanBoard` (container das colunas)
-- [ ] Componente `KanbanColumn` (lista de cards)
-- [ ] Componente `KanbanCard` (card arrastável)
-- [ ] Drag and drop entre colunas com reordenação
-- [ ] Atualização otimista no frontend ao mover card
-- [ ] Persistência imediata no banco ao soltar card
-- [ ] Rollback em caso de erro na API
+- [x] Instalar e configurar dnd-kit
+- [x] Componente `KanbanBoard` (container das colunas)
+- [x] Componente `KanbanColumn` (lista de cards)
+- [x] Componente `KanbanCard` (card arrastável)
+- [x] Drag and drop entre colunas com reordenação
+- [x] Atualização otimista no frontend ao mover card
+- [x] Persistência imediata no banco ao soltar card
+- [x] Rollback em caso de erro na API
 
 ---
 
 ## Etapa 6 — Gestão de Cards (Briefing)
 
-- [ ] Modal de criação de card com todos os campos
-- [ ] Modal de edição de card
-- [ ] Seleção de responsável (`assignedUserId`)
-- [ ] Campo de link Google Drive (`driveLink`)
-- [ ] Seleção de prioridade (`Priority`)
-- [ ] Seleção de status (`CardStatus`)
-- [ ] Exclusão de card com confirmação
+- [x] Modal de criação de card com todos os campos
+- [x] Modal de edição de card
+- [x] Seleção de responsável (`assignedUserId`)
+- [x] Campo de link Google Drive (`driveLink`)
+- [x] Seleção de prioridade (`Priority`)
+- [x] Seleção de status (`CardStatus`)
+- [x] Exclusão de card com confirmação
 
 ---
 
 ## Etapa 7 — Perfil de Cliente
 
-- [ ] Listagem de clientes
-- [ ] Tela de criação/edição de cliente
-- [ ] Campo `customHtml` com editor simples
-- [ ] Renderização isolada e sanitizada do HTML customizado
-- [ ] Associação de boards ao cliente
+- [x] Listagem de clientes
+- [x] Tela de criação/edição de cliente
+- [x] Campo `customHtml` com editor simples
+- [x] Renderização isolada e sanitizada do HTML customizado
+- [x] Associação de boards ao cliente
 
 ---
 
 ## Etapa 8 — Activity Log
 
-- [ ] Registrar log ao criar card
-- [ ] Registrar log ao mover card
-- [ ] Registrar log ao editar card
-- [ ] Registrar log ao atribuir responsável
-- [ ] Componente de visualização do log por board
+- [x] Registrar log ao criar card
+- [x] Registrar log ao mover card
+- [x] Registrar log ao editar card
+- [x] Registrar log ao atribuir responsável
+- [x] Componente de visualização do log por board
 
 ---
 
 ## Etapa 9 — Performance e UX
 
-- [ ] Memoização de componentes pesados (`React.memo`, `useMemo`, `useCallback`)
-- [ ] Lazy loading de módulos secundários
-- [ ] Skeleton loading nas listagens
-- [ ] Feedback visual imediato em todas as ações
-- [ ] Evitar re-renders desnecessários (revisar com React DevTools)
+- [x] Memoização de componentes pesados (`React.memo`, `useMemo`, `useCallback`)
+- [x] Lazy loading de módulos secundários
+- [x] Skeleton loading nas listagens
+- [x] Feedback visual imediato em todas as ações
+- [x] Evitar re-renders desnecessários (revisar com React DevTools)
 
 ---
 
 ## Etapa 10 — Segurança
 
-- [ ] Sanitização de HTML do perfil de cliente (ex: DOMPurify)
-- [ ] Validação de inputs no backend (ex: Zod)
-- [ ] Controle de acesso verificado em todas as rotas de API
-- [ ] Revisão de exposição de dados sensíveis na API
+- [x] Sanitização de HTML do perfil de cliente (DOMPurify)
+- [x] Validação de inputs no backend (Zod)
+- [x] Controle de acesso verificado em todas as rotas de API
+- [x] Revisão de exposição de dados sensíveis na API
 
 ---
 
