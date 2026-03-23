@@ -14,22 +14,38 @@ export const authOptions: AuthOptions = {
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null
 
-        const user = await prismaClient.user.findUnique({
-          where: { email: credentials.email },
-        })
+        try {
+          const user = await prismaClient.user.findUnique({
+            where: { email: credentials.email },
+          })
 
-        if (!user) return null
-        if (!user.isActive) return null
+          if (!user) {
+            console.error('[auth] User not found:', credentials.email)
+            return null
+          }
 
-        const passwordMatches = await bcrypt.compare(credentials.password, user.password)
-        if (!passwordMatches) return null
+          if (!user.isActive) {
+            console.error('[auth] User is inactive:', credentials.email)
+            return null
+          }
 
-        return {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          role: user.role,
-          isActive: user.isActive,
+          const passwordMatches = await bcrypt.compare(credentials.password, user.password)
+
+          if (!passwordMatches) {
+            console.error('[auth] Password mismatch for:', credentials.email)
+            return null
+          }
+
+          return {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+            isActive: user.isActive,
+          }
+        } catch (error) {
+          console.error('[auth] Exception in authorize:', error)
+          return null
         }
       },
     }),
