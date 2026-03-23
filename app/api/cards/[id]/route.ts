@@ -100,7 +100,7 @@ export async function PUT(request: Request, { params }: RouteParams) {
         boardId: card.column.boardId,
         cardId: card.id,
       })),
-    ).catch(() => {})
+    )
 
     return NextResponse.json(card)
   } catch (error) {

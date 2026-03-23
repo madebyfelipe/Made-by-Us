@@ -10,8 +10,20 @@ function createPrismaClient(): PrismaClient {
   return new PrismaClient({ adapter })
 }
 
-export const prismaClient: PrismaClient =
-  globalForPrisma.prismaClient ?? createPrismaClient()
+function isCompatibleClient(client: PrismaClient | undefined): client is PrismaClient {
+  if (!client) return false
+
+  const candidate = client as PrismaClient & {
+    activityLog?: unknown
+    cardComment?: unknown
+  }
+
+  return typeof candidate.activityLog !== 'undefined' && typeof candidate.cardComment !== 'undefined'
+}
+
+export const prismaClient: PrismaClient = isCompatibleClient(globalForPrisma.prismaClient)
+  ? globalForPrisma.prismaClient
+  : createPrismaClient()
 
 if (process.env.NODE_ENV !== 'production') {
   globalForPrisma.prismaClient = prismaClient

@@ -19,8 +19,12 @@ import KanbanColumn from './KanbanColumn'
 import KanbanCard from './KanbanCard'
 import type { BoardWithColumnsAndCards, CardWithAssignedUser } from '@/types'
 
-const CardModal = dynamic(() => import('./CardModal'), { ssr: false })
-const QuickCreateModal = dynamic(() => import('./QuickCreateModal'), { ssr: false })
+const CardModal = dynamic(() => import('./CardModal').then((module) => module.default), {
+  ssr: false,
+})
+const QuickCreateModal = dynamic(() => import('./QuickCreateModal').then((module) => module.default), {
+  ssr: false,
+})
 
 type Column = BoardWithColumnsAndCards['columns'][number]
 
@@ -57,17 +61,6 @@ export default function KanbanBoard({ board, readOnly = false }: Props) {
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }))
 
   useEffect(() => {
-    if (!activeCard && !activeColumn) {
-      pointerXRef.current = null
-
-      if (scrollFrameRef.current !== null) {
-        cancelAnimationFrame(scrollFrameRef.current)
-        scrollFrameRef.current = null
-      }
-
-      return
-    }
-
     const EDGE_THRESHOLD = 120
     const MAX_SCROLL_STEP = 22
 
@@ -106,7 +99,11 @@ export default function KanbanBoard({ board, readOnly = false }: Props) {
         scrollFrameRef.current = null
       }
     }
-  }, [activeCard, activeColumn])
+  }, [])
+
+  function updatePointerX(clientX: number) {
+    pointerXRef.current = clientX
+  }
 
   function findColumnByCardId(currentColumns: Column[], cardId: string): Column | undefined {
     return currentColumns.find((column) => column.cards.some((card) => card.id === cardId))
@@ -128,8 +125,8 @@ export default function KanbanBoard({ board, readOnly = false }: Props) {
   }
 
   function handleDragMove({ activatorEvent }: DragMoveEvent) {
-    if (!('clientX' in activatorEvent)) return
-    pointerXRef.current = activatorEvent.clientX
+    if (!('clientX' in activatorEvent) || typeof activatorEvent.clientX !== 'number') return
+    updatePointerX(activatorEvent.clientX)
   }
 
   function handleDragOver({ active, over }: DragOverEvent) {
@@ -168,6 +165,8 @@ export default function KanbanBoard({ board, readOnly = false }: Props) {
 
   async function handleDragEnd({ active, over }: DragEndEvent) {
     if (readOnly) return
+
+    pointerXRef.current = null
 
     if (active.data.current?.type === 'column') {
       setActiveColumn(null)
@@ -390,7 +389,14 @@ export default function KanbanBoard({ board, readOnly = false }: Props) {
           items={columns.map((column) => column.id)}
           strategy={horizontalListSortingStrategy}
         >
-          <div ref={scrollAreaRef} className="flex h-full gap-5 overflow-x-auto p-6">
+          <div
+            ref={scrollAreaRef}
+            onMouseMove={(event) => updatePointerX(event.clientX)}
+            onMouseLeave={() => {
+              pointerXRef.current = null
+            }}
+            className="flex h-full gap-5 overflow-x-auto p-6"
+          >
             {columns.map((column) => (
               <KanbanColumn
                 key={column.id}
@@ -467,7 +473,7 @@ export default function KanbanBoard({ board, readOnly = false }: Props) {
           mode={modalState.mode}
           columnId={modalState.mode === 'create' ? modalState.columnId : modalState.card.columnId}
           card={modalState.mode === 'edit' ? modalState.card : null}
-          readOnly={readOnly}
+          readOnly={modalState.mode === 'create' ? readOnly : false}
           onClose={() => setModalState(null)}
           onCardCreated={handleCardCreated}
           onCardUpdated={handleCardUpdated}

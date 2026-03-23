@@ -16,7 +16,11 @@ export async function createActivityLogs(
 ): Promise<void> {
   if (params.length === 0) return
 
-  await prismaClient.activityLog.createMany({
-    data: params,
-  })
+  await prismaClient.$transaction(
+    params.map((item) =>
+      prismaClient.activityLog.create({
+        data: item,
+      }),
+    ),
+  )
 }

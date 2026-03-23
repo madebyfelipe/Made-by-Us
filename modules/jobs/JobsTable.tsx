@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic'
 import { useAuthenticatedUser } from '@/modules/auth/useAuthenticatedUser'
 import type { JobCard } from './jobTypes'
 
-const JobReadModal = dynamic(() => import('@/modules/jobs/JobReadModal'), { ssr: false })
+const JobReadModal = dynamic(() => import('./JobReadModal'), { ssr: false })
 
 const statusConfig = {
   TODO: { label: 'A fazer', dotClassName: 'bg-[#525252]' },
@@ -33,18 +33,18 @@ function formatDeadline(deadline: string): { label: string; className: string } 
   return { label, className: 'text-[#525252]' }
 }
 
-type Props = { cards: JobCard[] }
+type JobTableCard = JobCard
+
+type Props = { cards: JobTableCard[] }
 
 export default function JobsTable({ cards: initialCards }: Props) {
   const user = useAuthenticatedUser()
   const isOwner = user?.role === 'OWNER'
+  const [cards] = useState(initialCards)
   const [filter, setFilter] = useState<'mine' | 'all'>('mine')
-  const [selectedCard, setSelectedCard] = useState<JobCard | null>(null)
+  const [selectedCard, setSelectedCard] = useState<JobTableCard | null>(null)
 
-  const visibleCards =
-    filter === 'mine'
-      ? initialCards.filter((card) => card.assignedUserId === user?.id)
-      : initialCards
+  const visibleCards = filter === 'mine' ? cards.filter((card) => card.assignedUserId === user?.id) : cards
 
   const sortedCards = [
     ...visibleCards
@@ -59,7 +59,7 @@ export default function JobsTable({ cards: initialCards }: Props) {
     ...visibleCards
       .filter((card) => card.status === 'DONE')
       .sort((firstCard, secondCard) =>
-        (secondCard.deadline ?? '').localeCompare(firstCard.deadline ?? ''),
+        String(secondCard.deadline ?? '').localeCompare(String(firstCard.deadline ?? '')),
       ),
   ]
 
@@ -112,7 +112,7 @@ export default function JobsTable({ cards: initialCards }: Props) {
             <tbody className="divide-y divide-[#1A1A1A]">
               {sortedCards.map((card) => {
                 const status = statusConfig[card.status]
-                const deadline = card.deadline ? formatDeadline(card.deadline) : null
+                const deadline = card.deadline ? formatDeadline(String(card.deadline)) : null
 
                 return (
                   <tr
