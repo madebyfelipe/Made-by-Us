@@ -17,6 +17,7 @@ type Props = {
   onCardClick: (card: CardWithAssignedUser) => void
   onRenameColumn: (columnId: string, newName: string) => void
   onDeleteColumn: (columnId: string) => void
+  onComplete?: (cardId: string) => void
 }
 
 export default memo(function KanbanColumn({
@@ -26,6 +27,7 @@ export default memo(function KanbanColumn({
   onCardClick,
   onRenameColumn,
   onDeleteColumn,
+  onComplete,
 }: Props) {
   const [isRenaming, setIsRenaming] = useState(false)
   const [renameValue, setRenameValue] = useState(column.name)
@@ -162,6 +164,7 @@ export default memo(function KanbanColumn({
               card={card}
               readOnly={readOnly}
               onCardClick={onCardClick}
+              onComplete={onComplete}
             />
           ))}
         </SortableContext>

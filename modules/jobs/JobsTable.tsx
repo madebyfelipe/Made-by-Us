@@ -8,9 +8,9 @@ import type { JobCard } from './jobTypes'
 const JobReadModal = dynamic(() => import('./JobReadModal'), { ssr: false })
 
 const statusConfig = {
-  TODO: { label: 'A fazer', dotClassName: 'bg-[#525252]' },
-  IN_PROGRESS: { label: 'Em andamento', dotClassName: 'bg-amber-400' },
-  IN_REVIEW: { label: 'Em revisao', dotClassName: 'bg-blue-400' },
+  TODO: { label: 'A fazer', dotClassName: 'bg-white' },
+  IN_PROGRESS: { label: 'Em andamento', dotClassName: 'bg-blue-400' },
+  IN_REVIEW: { label: 'Em revisao', dotClassName: 'bg-amber-400' },
   DONE: { label: 'Concluido', dotClassName: 'bg-emerald-400' },
 } as const
 
@@ -35,55 +35,65 @@ function formatDeadline(deadline: string): { label: string; className: string } 
 
 type JobTableCard = JobCard
 
+type FilterMode = 'mine' | 'all' | 'done'
+
+const TAB_LABELS: Record<FilterMode, string> = {
+  mine: 'Minha Pauta',
+  all: 'Todos',
+  done: 'Concluídos',
+}
+
+function filterCards(cards: JobTableCard[], filter: FilterMode, userId: string | undefined): JobTableCard[] {
+  if (filter === 'mine') return cards.filter((card) => card.status !== 'DONE' && card.assignedUserId === userId)
+  if (filter === 'all') return cards.filter((card) => card.status !== 'DONE')
+  return cards.filter((card) => card.status === 'DONE')
+}
+
+function sortForDisplay(cards: JobTableCard[], filter: FilterMode): JobTableCard[] {
+  if (filter === 'done') {
+    return [...cards].sort((a, b) => String(b.deadline ?? '').localeCompare(String(a.deadline ?? '')))
+  }
+  return [...cards].sort((a, b) => {
+    if (!a.deadline && !b.deadline) return 0
+    if (!a.deadline) return 1
+    if (!b.deadline) return -1
+    return new Date(a.deadline).getTime() - new Date(b.deadline).getTime()
+  })
+}
+
 type Props = { cards: JobTableCard[] }
 
 export default function JobsTable({ cards: initialCards }: Props) {
   const user = useAuthenticatedUser()
   const isOwner = user?.role === 'OWNER'
   const [cards] = useState(initialCards)
-  const [filter, setFilter] = useState<'mine' | 'all'>('mine')
+  const [filter, setFilter] = useState<FilterMode>('mine')
   const [selectedCard, setSelectedCard] = useState<JobTableCard | null>(null)
 
-  const visibleCards = filter === 'mine' ? cards.filter((card) => card.assignedUserId === user?.id) : cards
+  const filteredCards = filterCards(cards, filter, user?.id)
+  const sortedCards = sortForDisplay(filteredCards, filter)
 
-  const sortedCards = [
-    ...visibleCards
-      .filter((card) => card.status !== 'DONE')
-      .sort((firstCard, secondCard) => {
-        if (!firstCard.deadline && !secondCard.deadline) return 0
-        if (!firstCard.deadline) return 1
-        if (!secondCard.deadline) return -1
-
-        return new Date(firstCard.deadline).getTime() - new Date(secondCard.deadline).getTime()
-      }),
-    ...visibleCards
-      .filter((card) => card.status === 'DONE')
-      .sort((firstCard, secondCard) =>
-        String(secondCard.deadline ?? '').localeCompare(String(firstCard.deadline ?? '')),
-      ),
-  ]
+  const visibleTabs: FilterMode[] = isOwner ? ['mine', 'all', 'done'] : ['mine', 'done']
 
   return (
     <div>
-      {isOwner && (
-        <div className="mb-6 flex w-fit gap-1 rounded-lg border border-[#2A2A2A] p-1">
-          {(['mine', 'all'] as const).map((option) => (
-            <button
-              key={option}
-              type="button"
-              onClick={() => setFilter(option)}
-              className={[
-                'rounded-md px-5 py-2 text-sm font-medium transition-colors duration-150',
-                filter === option
-                  ? 'bg-[#1A1A1A] text-[#FAFAFA]'
-                  : 'text-[#525252] hover:text-[#A3A3A3]',
-              ].join(' ')}
-            >
-              {option === 'mine' ? 'Minha Pauta' : 'Todos'}
-            </button>
-          ))}
-        </div>
-      )}
+      <div className="mb-6 flex w-fit gap-1 rounded-lg border border-[#2A2A2A] p-1">
+        {visibleTabs.map((tab) => (
+          <button
+            key={tab}
+            type="button"
+            onClick={() => setFilter(tab)}
+            className={[
+              'rounded-md px-5 py-2 text-sm font-medium transition-colors duration-150',
+              filter === tab
+                ? 'bg-[#1A1A1A] text-[#FAFAFA]'
+                : 'text-[#525252] hover:text-[#A3A3A3]',
+            ].join(' ')}
+          >
+            {TAB_LABELS[tab]}
+          </button>
+        ))}
+      </div>
 
       {sortedCards.length === 0 ? (
         <p className="py-16 text-center text-base text-[#525252]">Nenhum card encontrado</p>
@@ -155,7 +165,7 @@ export default function JobsTable({ cards: initialCards }: Props) {
 
                     <td className="px-5 py-4">
                       <span className="flex items-center gap-2">
-                        <span className={`h-2 w-2 rounded-full ${status.dotClassName}`} />
+                        <span className={`h-2.5 w-2.5 rounded-full ${status.dotClassName}`} />
                         <span className="text-sm text-[#A3A3A3]">{status.label}</span>
                       </span>
                     </td>

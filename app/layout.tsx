@@ -6,6 +6,9 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Made by Felipe",
   description: "Sistema interno de produção de conteúdo",
+  icons: {
+    icon: "/logo-white.png",
+  },
 };
 
 export default function RootLayout({

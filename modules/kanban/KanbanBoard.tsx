@@ -17,6 +17,7 @@ import {
 import { arrayMove, SortableContext, horizontalListSortingStrategy } from '@dnd-kit/sortable'
 import KanbanColumn from './KanbanColumn'
 import KanbanCard from './KanbanCard'
+import { useAuthenticatedUser } from '@/modules/auth/useAuthenticatedUser'
 import type { BoardWithColumnsAndCards, CardWithAssignedUser } from '@/types'
 
 const CardModal = dynamic(() => import('./CardModal').then((module) => module.default), {
@@ -27,6 +28,31 @@ const QuickCreateModal = dynamic(() => import('./QuickCreateModal').then((module
 })
 
 type Column = BoardWithColumnsAndCards['columns'][number]
+
+type SortMode = 'default' | 'name' | 'deadline' | 'priority'
+
+const SORT_LABELS: Record<SortMode, string> = {
+  default: 'Padrão',
+  name: 'Nome',
+  deadline: 'Prazo',
+  priority: 'Prioridade',
+}
+
+const PRIORITY_RANK: Record<string, number> = { URGENT: 0, HIGH: 1, MEDIUM: 2, LOW: 3 }
+
+function sortCardsByMode(cards: CardWithAssignedUser[], mode: SortMode): CardWithAssignedUser[] {
+  if (mode === 'default') return cards
+  if (mode === 'name') return [...cards].sort((a, b) => a.title.localeCompare(b.title, 'pt-BR'))
+  if (mode === 'priority') {
+    return [...cards].sort((a, b) => (PRIORITY_RANK[a.priority] ?? 3) - (PRIORITY_RANK[b.priority] ?? 3))
+  }
+  return [...cards].sort((a, b) => {
+    if (!a.deadline && !b.deadline) return 0
+    if (!a.deadline) return 1
+    if (!b.deadline) return -1
+    return new Date(a.deadline).getTime() - new Date(b.deadline).getTime()
+  })
+}
 
 type ModalState =
   | { mode: 'create'; columnId: string }
@@ -51,6 +77,10 @@ export default function KanbanBoard({ board, readOnly = false }: Props) {
   const [modalState, setModalState] = useState<ModalState | null>(null)
   const [isAddingColumn, setIsAddingColumn] = useState(false)
   const [newColumnName, setNewColumnName] = useState('')
+  const [sortMode, setSortMode] = useState<SortMode>('default')
+
+  const authenticatedUser = useAuthenticatedUser()
+  const isOwner = authenticatedUser?.role === 'OWNER'
 
   const columnsRef = useRef(columns)
   columnsRef.current = columns
@@ -364,10 +394,51 @@ export default function KanbanBoard({ board, readOnly = false }: Props) {
     setModalState({ mode: 'edit', card })
   }, [])
 
+  const handleCardCompleted = useCallback(async (cardId: string) => {
+    const snapshot = columnsRef.current
+
+    setColumns((prev) =>
+      prev.map((column) => ({
+        ...column,
+        cards: column.cards.map((card) =>
+          card.id === cardId ? { ...card, status: 'DONE' as const } : card,
+        ),
+      })),
+    )
+
+    try {
+      const response = await fetch(`/api/cards/${cardId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'DONE' }),
+      })
+      if (!response.ok) throw new Error('Failed to complete card')
+    } catch {
+      setColumns(snapshot)
+    }
+  }, [])
+
   return (
     <>
       {!readOnly && (
-        <div className="flex items-center justify-end border-b border-[#1A1A1A] px-6 py-2">
+        <div className="flex items-center justify-between border-b border-[#1A1A1A] px-6 py-2">
+          <div className="flex items-center gap-1">
+            {(['default', 'name', 'deadline', 'priority'] as const).map((mode) => (
+              <button
+                key={mode}
+                onClick={() => setSortMode(mode)}
+                className={[
+                  'rounded-md px-2.5 py-1 text-xs font-medium transition-colors duration-150',
+                  sortMode === mode
+                    ? 'bg-[#1A1A1A] text-[#FAFAFA]'
+                    : 'text-[#525252] hover:text-[#A3A3A3]',
+                ].join(' ')}
+              >
+                {SORT_LABELS[mode]}
+              </button>
+            ))}
+          </div>
+
           <button
             onClick={() => setModalState({ mode: 'quick-create' })}
             className="rounded-lg border border-[#2A2A2A] px-3 py-1.5 text-xs text-[#A3A3A3] transition-all duration-150 hover:border-[#BC0319] hover:text-[#FAFAFA]"
@@ -397,17 +468,21 @@ export default function KanbanBoard({ board, readOnly = false }: Props) {
             }}
             className="flex h-full gap-5 overflow-x-auto p-6"
           >
-            {columns.map((column) => (
-              <KanbanColumn
-                key={column.id}
-                column={column}
-                readOnly={readOnly}
-                onAddCard={handleAddCard}
-                onCardClick={handleCardClick}
-                onRenameColumn={handleRenameColumn}
-                onDeleteColumn={handleDeleteColumn}
-              />
-            ))}
+            {columns.map((column) => {
+              const displayCards = sortCardsByMode(column.cards, sortMode)
+              return (
+                <KanbanColumn
+                  key={column.id}
+                  column={{ ...column, cards: displayCards }}
+                  readOnly={readOnly}
+                  onAddCard={handleAddCard}
+                  onCardClick={handleCardClick}
+                  onRenameColumn={handleRenameColumn}
+                  onDeleteColumn={handleDeleteColumn}
+                  onComplete={isOwner ? handleCardCompleted : undefined}
+                />
+              )
+            })}
 
             {!readOnly &&
               (isAddingColumn ? (

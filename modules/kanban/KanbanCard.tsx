@@ -13,9 +13,9 @@ const priorityConfig: Record<Priority, { label: string; className: string }> = {
 }
 
 const statusConfig: Record<CardStatus, { label: string; dotClassName: string }> = {
-  TODO: { label: 'A fazer', dotClassName: 'bg-[#525252]' },
-  IN_PROGRESS: { label: 'Em andamento', dotClassName: 'bg-amber-400' },
-  IN_REVIEW: { label: 'Em revisão', dotClassName: 'bg-blue-400' },
+  TODO: { label: 'A fazer', dotClassName: 'bg-white' },
+  IN_PROGRESS: { label: 'Em andamento', dotClassName: 'bg-blue-400' },
+  IN_REVIEW: { label: 'Em revisão', dotClassName: 'bg-amber-400' },
   DONE: { label: 'Concluído', dotClassName: 'bg-emerald-400' },
 }
 
@@ -131,15 +131,13 @@ function UserInitials({ name }: { name: string }) {
 
 function DeadlineBadge({ deadline }: { deadline: Date | string }) {
   const date = new Date(deadline)
-  const isOverdue = date < new Date()
+  const now = new Date()
+  const diffDays = Math.ceil((date.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
   const label = date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' })
 
-  return (
-    <span className={`text-xs font-medium ${isOverdue ? 'text-[#BC0319]' : 'text-[#A3A3A3]'}`}>
-      {isOverdue ? '! ' : ''}
-      {label}
-    </span>
-  )
+  if (diffDays < 0) return <span className="text-xs font-medium text-[#BC0319]">! {label}</span>
+  if (diffDays === 0) return <span className="text-xs font-medium text-amber-400">{label}</span>
+  return <span className="text-xs font-medium text-[#A3A3A3]">{label}</span>
 }
 
 function ContentTypeBadge({ type }: { type: ContentType }) {
@@ -176,6 +174,7 @@ type Props = {
   isOverlay?: boolean
   readOnly?: boolean
   onCardClick?: (card: CardWithAssignedUser) => void
+  onComplete?: (cardId: string) => void
 }
 
 export default memo(function KanbanCard({
@@ -183,6 +182,7 @@ export default memo(function KanbanCard({
   isOverlay = false,
   readOnly = false,
   onCardClick,
+  onComplete,
 }: Props) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: card.id,
@@ -207,7 +207,7 @@ export default memo(function KanbanCard({
       {...listeners}
       onClick={() => !isDragging && !isOverlay && onCardClick?.(card)}
       className={[
-        'select-none rounded-xl border border-[#2A2A2A] bg-[#141414] p-3.5',
+        'group relative select-none rounded-xl border border-[#2A2A2A] bg-[#141414] p-3.5',
         readOnly ? 'cursor-pointer' : 'cursor-grab active:cursor-grabbing',
         'transition-all duration-150',
         isDragging ? 'opacity-30' : 'hover:border-[#BC0319] hover:bg-[#1A1A1A]',
@@ -216,8 +216,20 @@ export default memo(function KanbanCard({
         .filter(Boolean)
         .join(' ')}
     >
+      {onComplete && card.status !== 'DONE' && (
+        <button
+          onClick={(event) => { event.stopPropagation(); onComplete(card.id) }}
+          onPointerDown={(event) => event.stopPropagation()}
+          title="Marcar como concluído"
+          aria-label="Marcar como concluído"
+          className="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-[#1A1A1A] text-[#525252] opacity-0 transition-all duration-150 group-hover:opacity-100 hover:bg-emerald-900 hover:text-emerald-400"
+        >
+          ✓
+        </button>
+      )}
+
       <div className="mb-2.5 flex items-center gap-2">
-        <span className={`h-2 w-2 shrink-0 rounded-full ${status.dotClassName}`} />
+        <span className={`h-2.5 w-2.5 shrink-0 rounded-full ${status.dotClassName}`} />
         <span className="text-xs font-medium text-[#525252]">{status.label}</span>
       </div>
 
@@ -233,14 +245,14 @@ export default memo(function KanbanCard({
       )}
 
       <div className="flex items-center justify-between gap-2">
+        <span className={`rounded-md px-2 py-0.5 text-xs font-semibold ${priority.className}`}>
+          {priority.label}
+        </span>
+
         <div className="flex items-center gap-2">
-          <span className={`rounded-md px-2 py-0.5 text-xs font-semibold ${priority.className}`}>
-            {priority.label}
-          </span>
+          {card.assignedUser && <UserInitials name={card.assignedUser.name} />}
           {card.deadline && <DeadlineBadge deadline={card.deadline} />}
         </div>
-
-        {card.assignedUser && <UserInitials name={card.assignedUser.name} />}
       </div>
     </div>
   )

@@ -131,11 +131,11 @@
 
 ## Etapa 11 — Deploy
 
-- [ ] Configurar projeto na Vercel
-- [ ] Configurar banco PostgreSQL (Supabase ou Railway)
-- [ ] Configurar variáveis de ambiente em produção
-- [ ] Rodar migrations em produção
-- [ ] Smoke test pós-deploy (login, criar card, mover card)
+- [x] Configurar projeto na Vercel
+- [x] Configurar banco PostgreSQL (Supabase ou Railway)
+- [x] Configurar variáveis de ambiente em produção
+- [x] Rodar migrations em produção
+- [x] Smoke test pós-deploy (login, criar card, mover card)
 
 ---
 
@@ -284,14 +284,14 @@
 
 > Foco: interface unificada com acesso rápido a todos os módulos.
 
-- [ ] Componente `AppHeader` (fixed top, z-50)
-  - [ ] Logo com link para `/`
-  - [ ] Links de navegação: Jobs (`/jobs`), Clientes (`/clients`)
-  - [ ] `NotificationBell` no canto direito
-  - [ ] `UserAvatarMenu` no canto direito
-- [ ] Integrar em `app/layout.tsx` (visível em todas as rotas exceto `/login`)
-- [ ] Adicionar `pt-12` ao wrapper de conteúdo para compensar header fixo
-- [ ] Remover headers isolados das páginas existentes (dashboard, clientes, perfil)
+- [x] Componente `AppHeader` (fixed top, z-50)
+  - [x] Logo com link para `/`
+  - [x] Links de navegação: Jobs (`/jobs`), Clientes (`/clients`)
+  - [x] `NotificationBell` no canto direito
+  - [x] `UserAvatarMenu` no canto direito
+- [x] Integrar em `app/layout.tsx` (visível em todas as rotas exceto `/login`)
+- [x] Adicionar `pt-12` ao wrapper de conteúdo para compensar header fixo
+- [x] Remover headers isolados das páginas existentes (dashboard, clientes, perfil)
 
 ---
 
@@ -299,12 +299,12 @@
 
 > Foco: visão operacional de todos os cards como lista plana.
 
-- [ ] Página `/jobs` (server component)
-- [ ] Componente `JobsTable` (client — com filtro toggle)
-  - [ ] Filtro: "Minha Pauta" (atribuídos ao usuário) / "Todos" (OWNER)
-  - [ ] Colunas: título + coluna, prazo (colorido por urgência), cliente + board, tipo de conteúdo, status
-  - [ ] Deadline colorido: vermelho (atrasado), âmbar (≤3 dias), muted (futuro)
-  - [ ] Link no título para abrir o card no Kanban
+- [x] Página `/jobs` (server component)
+- [x] Componente `JobsTable` (client — com filtro toggle)
+  - [x] Filtro: "Minha Pauta" (atribuídos ao usuário) / "Todos" (OWNER)
+  - [x] Colunas: título + coluna, prazo (colorido por urgência), cliente + board, tipo de conteúdo, status
+  - [x] Deadline colorido: vermelho (atrasado), âmbar (≤3 dias), muted (futuro)
+  - [x] Link no título para abrir o card no Kanban
 
 ---
 
@@ -312,14 +312,14 @@
 
 > Foco: alertas de cards atribuídos ao usuário logado.
 
-- [ ] API `GET /api/notifications`
-  - [ ] Retorna cards onde `assignedUserId === session.user.id`
-  - [ ] Include: título, coluna, cliente, deadline, status
-  - [ ] Ordenado por `updatedAt desc`, limite 20
-- [ ] Componente `NotificationBell`
-  - [ ] Ícone de sino com badge de contagem (cards não-DONE)
-  - [ ] Dropdown ao clicar com lista de cards
-  - [ ] Fetch client-side ao abrir
+- [x] API `GET /api/notifications`
+  - [x] Retorna cards onde `assignedUserId === session.user.id`
+  - [x] Include: título, coluna, cliente, deadline, status
+  - [x] Ordenado por `updatedAt desc`, limite 20
+- [x] Componente `NotificationBell`
+  - [x] Ícone de sino com badge de contagem (cards não-DONE)
+  - [x] Dropdown ao clicar com lista de cards
+  - [x] Fetch client-side ao abrir
 
 ---
 
@@ -327,10 +327,10 @@
 
 > Foco: acesso rápido ao perfil e ações do usuário.
 
-- [ ] Componente `UserAvatarMenu`
-  - [ ] Círculo com inicial do nome (`bg-[#BC0319]`)
-  - [ ] Dropdown: Configurações → `/settings`, Sair → `signOut()`
-  - [ ] Fechar ao clicar fora (click-outside)
+- [x] Componente `UserAvatarMenu`
+  - [x] Círculo com inicial do nome (`bg-[#BC0319]`)
+  - [x] Dropdown: Configurações → `/settings`, Sair → `signOut()`
+  - [x] Fechar ao clicar fora (click-outside)
 
 ---
 
@@ -338,14 +338,14 @@
 
 > Foco: gestão de conta e preferências do usuário.
 
-- [ ] Página `/settings`
-  - [ ] Seção **Conta**: nome, e-mail, role (read-only)
-  - [ ] Seção **Senha**: troca de senha com validação da senha atual
-  - [ ] Seção **Aparência**: toggle tema claro/escuro
-- [ ] API `POST /api/user/password`
-  - [ ] Validar sessão
-  - [ ] Verificar senha atual com bcrypt
-  - [ ] Hash da nova senha e salvar
+- [x] Página `/settings`
+  - [x] Seção **Conta**: nome, e-mail, role (read-only)
+  - [x] Seção **Senha**: troca de senha com validação da senha atual
+  - [x] Seção **Aparência**: toggle tema claro/escuro
+- [x] API `POST /api/user/password`
+  - [x] Validar sessão
+  - [x] Verificar senha atual com bcrypt
+  - [x] Hash da nova senha e salvar
 
 ---
 
@@ -353,11 +353,11 @@
 
 > Foco: conforto visual e preferência do usuário.
 
-- [ ] Adicionar CSS custom properties em `globals.css` (tokens de CLAUDE.md §20)
-  - [ ] `[data-theme="dark"]` (padrão atual)
-  - [ ] `[data-theme="light"]` (novo)
-- [ ] Persistência via `localStorage` + `document.documentElement.dataset.theme`
-- [ ] Aplicar na inicialização via `app/providers.tsx`
+- [x] Adicionar CSS custom properties em `globals.css` (tokens de CLAUDE.md §20)
+  - [x] `[data-theme="dark"]` (padrão atual)
+  - [x] `[data-theme="light"]` (novo)
+- [x] Persistência via `localStorage` + `document.documentElement.dataset.theme`
+- [x] Aplicar na inicialização via `app/layout.tsx` (inline script anti-flash)
 
 ---
 
@@ -365,10 +365,43 @@
 
 > Foco: contexto do cliente visível sem entrar no modo de edição.
 
-- [ ] Adicionar seção "Perfil Estratégico" em `/clients/[id]`
-  - [ ] Campos: nicho, tom de voz, frequência, objetivo, público-alvo, restrições, diferenciais, diretrizes
-  - [ ] Renderizar apenas se ao menos um campo estiver preenchido
-  - [ ] Layout em grid com leitura clara
+- [x] Adicionar seção "Perfil Estratégico" em `/clients/[id]`
+  - [x] Campos: nicho, tom de voz, frequência, objetivo, público-alvo, restrições, diferenciais, diretrizes
+  - [x] Renderizar apenas se ao menos um campo estiver preenchido
+  - [x] Layout em grid com leitura clara
+
+---
+
+## Etapa 26 — Melhorias Identificadas (Backlog)
+
+> Observações registradas para implementação futura. Não bloqueiam etapas anteriores.
+
+- [x] **Kanban — Filtros de ordenação**
+  - [x] Adicionar controle de filtro/ordenação na toolbar do board
+  - [x] Opção: sem ordenação (padrão atual)
+  - [x] Opção: ordenar por nome (alfabético)
+  - [x] Opção: ordenar por data de entrega (deadline)
+  - [x] Opção: ordenar por prioridade (HIGH → LOW)
+- [x] **Tela Jobs — Aba de Concluídos**
+  - [x] Adicionar terceira aba "Concluídos" ao lado de "Minha Pauta" e "Todos"
+  - [x] Filtrar cards com `status === DONE`
+  - [x] Manter mesma estrutura de colunas da tabela
+- [x] **Kanban — Botão "Concluir" para Owner**
+  - [x] Exibir botão de ação rápida "Concluir" no card para usuários com `role === OWNER`
+  - [x] Ao clicar, alterar `status` para `DONE` via `PUT /api/cards/:id`
+  - [x] Atualização otimista no frontend
+- [x] **Kanban — Indicador visual de prazo no card**
+  - [x] Prazo no dia atual → badge/borda amarela
+  - [x] Prazo ultrapassado → badge/borda vermelha
+  - [x] Prazo futuro → estilo neutro/muted
+- [x] **Kanban — Posicionamento da data no card**
+  - [x] Mover exibição da deadline para o canto inferior direito do card
+- [x] **Kanban — Cor do dot de status no card**
+  - [x] `TODO` (A Fazer) → bolinha branca
+  - [x] `IN_PROGRESS` (Em Progresso) → bolinha azul
+  - [x] `IN_REVIEW` (Em Revisão) → bolinha amarela
+  - [x] `DONE` (Concluído) → bolinha verde
+  - [x] Aumentar visibilidade geral do dot (tamanho ou contraste)
 
 ---
 

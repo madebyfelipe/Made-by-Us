@@ -46,6 +46,10 @@ Se houver conflito entre velocidade e qualidade:
 - TypeScript
 - TailwindCSS
 - dnd-kit (drag and drop)
+- React Query (data fetching e cache)
+- Zod (validação de schemas)
+- NextAuth.js (autenticação)
+- DOMPurify (sanitização de HTML)
 
 ### Backend
 
@@ -72,6 +76,10 @@ Se houver conflito entre velocidade e qualidade:
   /cards
   /clients
   /auth
+  /activity
+  /jobs
+  /settings
+  /users
 /services
 /hooks
 /types
@@ -91,12 +99,24 @@ Se houver conflito entre velocidade e qualidade:
 
 ### Entidades principais
 
-- `User`
-- `Client`
-- `Board`
-- `Column`
-- `Card`
-- `ActivityLog`
+- `User` — campos: `id`, `name`, `email`, `password`, `role`, `isActive`, `createdAt`
+- `Client` — campos: `id`, `name`, `description`, `niche`, `toneOfVoice`, `mainObjective`, `platforms`, `contentFrequency`, `targetAudience`, `restrictions`, `differentials`, `operationalGuidelines`, `customHtml`, `createdAt`, `updatedAt`
+- `Board` — campos: `id`, `name`, `clientId`, `createdAt`, `updatedAt`
+- `Column` — campos: `id`, `name`, `order`, `boardId`, `createdAt`
+- `Card` — ver §8
+- `ActivityLog` — campos: `id`, `message`, `userId`, `cardId?`, `boardId`, `createdAt`
+- `CardComment` — campos: `id`, `content`, `mentionUserIds[]`, `cardId`, `authorId`, `createdAt`, `updatedAt`
+
+### Enums
+
+```typescript
+enum Role           { OWNER, MEMBER }
+enum CardStatus     { TODO, IN_PROGRESS, IN_REVIEW, DONE }
+enum Priority       { LOW, MEDIUM, HIGH, URGENT }
+enum ContentType    { POST, STORY, REELS, CAROUSEL, ADS }
+enum Effort         { LOW, MEDIUM, HIGH }
+enum ProductionStage { ROTEIRO, DESIGN, EDICAO, REVISAO, APROVACAO }
+```
 
 ### Regras
 
@@ -170,14 +190,36 @@ Cada card deve conter estrutura clara:
 
 ```typescript
 type Card = {
+  // Identificação
+  id: string
   title: string
-  description: string
+  contentType: ContentType | null   // POST | STORY | REELS | CAROUSEL | ADS
+  platform: string                  // comma-separated: instagram, linkedin, tiktok, youtube
+
+  // Execução
+  assignedUserId: string | null
+  deadline: DateTime | null
+  priority: Priority                // LOW | MEDIUM | HIGH | URGENT
+  status: CardStatus                // TODO | IN_PROGRESS | IN_REVIEW | DONE
+  effort: Effort | null             // LOW | MEDIUM | HIGH
+  stage: ProductionStage | null     // ROTEIRO | DESIGN | EDICAO | REVISAO | APROVACAO
+
+  // Estratégia
   objective: string
+  cta: string
+  description: string
+
+  // Referências
   references: string
-  assignedUserId: string
   driveLink: string
-  status: CardStatus
-  priority: Priority
+
+  // Posição
+  order: number
+  columnId: string
+
+  // Metadata
+  createdAt: DateTime
+  updatedAt: DateTime
 }
 ```
 
@@ -189,14 +231,20 @@ Não usar campo único para tudo.
 
 Cada cliente possui:
 
-- `name`
-- `description`
-- `customHtml`
+**Identidade**
+- `name`, `description`, `customHtml`
+
+**Estratégia**
+- `niche`, `toneOfVoice`, `mainObjective`, `platforms`, `contentFrequency`, `targetAudience`
+
+**Operacional**
+- `restrictions`, `differentials`, `operationalGuidelines`
 
 ### Regras
 
-- Sanitizar HTML (segurança)
-- Renderizar de forma isolada
+- Sanitizar HTML com DOMPurify antes de salvar
+- Renderizar `customHtml` em iframe isolado (fundo branco forçado)
+- Exibir perfil estratégico somente se ao menos um campo estiver preenchido
 - Não misturar lógica com renderização
 
 ---
