@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   title: "Made by Felipe",
   description: "Sistema interno de produção de conteúdo",
   icons: {
-    icon: "/logo-white.png",
+    icon: "/favicon.png",
   },
 };
 
