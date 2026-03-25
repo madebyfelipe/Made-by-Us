@@ -66,9 +66,19 @@ type Props = { cards: JobTableCard[] }
 export default function JobsTable({ cards: initialCards }: Props) {
   const user = useAuthenticatedUser()
   const isOwner = user?.role === 'OWNER'
-  const [cards] = useState(initialCards)
+  const [cards, setCards] = useState(initialCards)
   const [filter, setFilter] = useState<FilterMode>('mine')
   const [selectedCard, setSelectedCard] = useState<JobTableCard | null>(null)
+
+  async function handleCompleteCard(cardId: string) {
+    const response = await fetch(`/api/cards/${cardId}/complete`, { method: 'POST' })
+    if (!response.ok) throw new Error('Failed to complete card')
+
+    setCards((prev) =>
+      prev.map((card) => (card.id === cardId ? { ...card, status: 'DONE' as const } : card)),
+    )
+    setSelectedCard(null)
+  }
 
   const filteredCards = filterCards(cards, filter, user?.id)
   const sortedCards = sortForDisplay(filteredCards, filter)
@@ -177,7 +187,14 @@ export default function JobsTable({ cards: initialCards }: Props) {
         </div>
       )}
 
-      {selectedCard && <JobReadModal card={selectedCard} onClose={() => setSelectedCard(null)} />}
+      {selectedCard && (
+        <JobReadModal
+          card={selectedCard}
+          onClose={() => setSelectedCard(null)}
+          isOwner={isOwner}
+          onComplete={handleCompleteCard}
+        />
+      )}
     </div>
   )
 }
