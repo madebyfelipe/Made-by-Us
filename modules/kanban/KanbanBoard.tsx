@@ -396,22 +396,33 @@ export default function KanbanBoard({ board, readOnly = false }: Props) {
 
   const handleCardCompleted = useCallback(async (cardId: string) => {
     const snapshot = columnsRef.current
+    const lastColumn = columnsRef.current[columnsRef.current.length - 1]
 
-    setColumns((prev) =>
-      prev.map((column) => ({
+    if (!lastColumn) return
+
+    const sourceColumn = columnsRef.current.find((col) => col.cards.some((c) => c.id === cardId))
+    const card = sourceColumn?.cards.find((c) => c.id === cardId)
+
+    if (!card) return
+
+    setColumns((prev) => {
+      const withoutCard = prev.map((column) => ({
         ...column,
-        cards: column.cards.map((card) =>
-          card.id === cardId ? { ...card, status: 'DONE' as const } : card,
-        ),
-      })),
-    )
+        cards: column.cards.filter((c) => c.id !== cardId),
+      }))
+
+      return withoutCard.map((column) => {
+        if (column.id !== lastColumn.id) return column
+        const targetOrder = column.cards.length
+        return {
+          ...column,
+          cards: [...column.cards, { ...card, status: 'DONE' as const, columnId: lastColumn.id, order: targetOrder }],
+        }
+      })
+    })
 
     try {
-      const response = await fetch(`/api/cards/${cardId}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: 'DONE' }),
-      })
+      const response = await fetch(`/api/cards/${cardId}/complete`, { method: 'POST' })
       if (!response.ok) throw new Error('Failed to complete card')
     } catch {
       setColumns(snapshot)

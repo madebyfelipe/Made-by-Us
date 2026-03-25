@@ -8,6 +8,8 @@ import type { JobCard } from './jobTypes'
 type Props = {
   card: JobCard
   onClose: () => void
+  isOwner?: boolean
+  onComplete?: (cardId: string) => Promise<void>
 }
 
 type Tab = 'details' | 'briefing'
@@ -94,8 +96,19 @@ function LongTextBlock({ label, value }: { label: string; value: string }) {
   )
 }
 
-export default function JobReadModal({ card, onClose }: Props) {
+export default function JobReadModal({ card, onClose, isOwner = false, onComplete }: Props) {
   const [activeTab, setActiveTab] = useState<Tab>('details')
+  const [isCompleting, setIsCompleting] = useState(false)
+
+  async function handleComplete() {
+    if (!onComplete) return
+    setIsCompleting(true)
+    try {
+      await onComplete(card.id)
+    } finally {
+      setIsCompleting(false)
+    }
+  }
 
   const detailRows = useMemo(
     () => [
@@ -200,13 +213,26 @@ export default function JobReadModal({ card, onClose }: Props) {
             Abrir board
           </Link>
 
-          <button
-            type="button"
-            onClick={onClose}
-            className="rounded-lg bg-[#BC0319] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[#A30215]"
-          >
-            Fechar
-          </button>
+          <div className="flex items-center gap-3">
+            {isOwner && card.status !== 'DONE' && onComplete && (
+              <button
+                type="button"
+                onClick={handleComplete}
+                disabled={isCompleting}
+                className="rounded-lg border border-emerald-800 px-4 py-2 text-sm font-medium text-emerald-400 transition-colors hover:bg-emerald-900/30 disabled:opacity-50"
+              >
+                {isCompleting ? 'Concluindo...' : 'Concluir'}
+              </button>
+            )}
+
+            <button
+              type="button"
+              onClick={onClose}
+              className="rounded-lg bg-[#BC0319] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[#A30215]"
+            >
+              Fechar
+            </button>
+          </div>
         </div>
       </div>
     </div>
